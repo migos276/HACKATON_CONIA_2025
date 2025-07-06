@@ -48,9 +48,6 @@ venv\Scripts\activate  # Windows
 # Installer les dépendances
 pip install -r requirements.txt
 
-# Créer un modèle factice (si pas de modèle réel)
-python create_dummy_model.py
-
 # Démarrer l'application
 chmod +x run.sh
 ./run.sh
