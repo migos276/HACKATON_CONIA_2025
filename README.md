@@ -2,7 +2,7 @@
 
 Une application Flask intelligente utilisant TensorFlow pour identifier automatiquement les plats traditionnels africains à partir d'images, maintenant avec base de données SQLite et support Docker.
 
-## Démarrage Rapide avec Docker
+## 🚀 Démarrage Rapide avec Docker
 
 ### Prérequis
 - Docker et Docker Compose installés
@@ -11,17 +11,13 @@ Une application Flask intelligente utilisant TensorFlow pour identifier automati
 ### Lancement Simple
 
 ```bash
-lancer application 
-comment lancer mon application a partir de l'image Docker
+# Cloner le repository
+git clone https://github.com/migos276/HACKATON_CONIA_2025
+ce diriger dans le repertoire et 
 
--charger d'abord image docker dans votre environement 
+# Construire et démarrer l'application
+docker-compose up --build
 
- gunzip hackaton.tar.gz    
- docker load -i  hackaton.tar
-
--lancer le docker
-
- docker run -p 5000:5000 project-afrifood-app:latest python3 app.py
 # L'application sera accessible sur http://localhost:5000
 ```
 
