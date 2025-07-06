@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">🍽️ Découvrez l'Afrique à travers ses Saveurs</h1>
+            <p class="hero-subtitle">
+                Utilisez l'intelligence artificielle pour identifier et explorer la richesse culinaire africaine. 
+                De l'Ekwang camerounais au Jollof ghanéen, plongez dans un voyage gastronomique authentique.
+            </p>
+            {% if session.user_email %}
+                <a href="{{ url_for('dashboard') }}" class="btn btn-primary pulse">
+                    <i class="fas fa-camera"></i> Commencer l'Analyse
+                </a>
+            {% else %}
+                <a href="{{ url_for('register') }}" class="btn btn-primary pulse">
+                    <i class="fas fa-rocket"></i> Commencer l'Aventure
+                </a>
+            {% endif %}
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">🌍 Pourquoi AfriFood AI ?</h2>
+        <div class="grid grid-3">
+            <div class="card">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <i class="fas fa-brain" style="font-size: 3rem; color: var(--primary-color);"></i>
+                </div>
+                <h3 style="color: var(--secondary-color); margin-bottom: 1rem; text-align: center;">IA Avancée</h3>
+                <p style="text-align: center;">
+                    Notre modèle d'intelligence artificielle reconnaît avec précision les plats traditionnels africains 
+                    et vous fournit des informations détaillées sur leur origine et leur préparation.
+                </p>
+            </div>
+            
+            <div class="card">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <i class="fas fa-globe-africa" style="font-size: 3rem; color: var(--accent-color);"></i>
+                </div>
+                <h3 style="color: var(--secondary-color); margin-bottom: 1rem; text-align: center;">Héritage Culturel</h3>
+                <p style="text-align: center;">
+                    Préservez et transmettez la richesse culinaire africaine. Chaque plat raconte une histoire, 
+                    une tradition, un savoir-faire ancestral que nous célébrons.
+                </p>
+            </div>
+            
+            <div class="card">
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <i class="fas fa-users" style="font-size: 3rem; color: var(--forest-green);"></i>
+                </div>
+                <h3 style="color: var(--secondary-color); margin-bottom: 1rem; text-align: center;">Communauté</h3>
+                <p style="text-align: center;">
+                    Rejoignez une communauté passionnée qui partage l'amour de la cuisine africaine. 
+                    Découvrez, apprenez et partagez vos expériences culinaires.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">🍲 Plats Reconnus par notre IA</h2>
+        <div class="grid grid-2">
+            <div class="card">
+                <h3 style="color: var(--primary-color); margin-bottom: 1rem;">
+                    <span style="font-size: 2rem;">🌿</span> Plats Camerounais
+                </h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                        <strong>Ekwang</strong> - Tubercules de taro enveloppés dans leurs feuilles
+                    </li>
+                    <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                        <strong>Eru (Okok)</strong> - Légume sauvage aux multiples vertus
+                    </li>
+                    <li style="padding: 0.5rem 0;">
+                        <strong>Ndolé</strong> - Le plat national aux arachides
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h3 style="color: var(--accent-color); margin-bottom: 1rem;">
+                    <span style="font-size: 2rem;">🍚</span> Spécialités Ghanéennes
+                </h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                        <strong>Jollof Rice</strong> - Le riz parfumé légendaire
+                    </li>
+                    <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                        <strong>Waakye</strong> - Riz et haricots aux feuilles de millet
+                    </li>
+                    <li style="padding: 0.5rem 0;">
+                        <strong>Palm Nut Soup</strong> - Soupe traditionnelle à l'huile de palme
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">🚀 Comment ça marche ?</h2>
+        <div class="grid grid-4">
+            <div class="card" style="text-align: center;">
+                <div style="background: var(--primary-color); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem; font-weight: bold;">1</div>
+                <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">Inscrivez-vous</h4>
+                <p style="font-size: 0.9rem;">Créez votre compte gratuit en quelques secondes</p>
+            </div>
+            
+            <div class="card" style="text-align: center;">
+                <div style="background: var(--accent-color); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem; font-weight: bold;">2</div>
+                <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">Prenez une Photo</h4>
+                <p style="font-size: 0.9rem;">Photographiez votre plat ou téléchargez une image</p>
+            </div>
+            
+            <div class="card" style="text-align: center;">
+                <div style="background: var(--forest-green); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem; font-weight: bold;">3</div>
+                <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">Analyse IA</h4>
+                <p style="font-size: 0.9rem;">Notre IA identifie le plat en quelques secondes</p>
+            </div>
+            
+            <div class="card" style="text-align: center;">
+                <div style="background: var(--gold-yellow); color: var(--dark-color); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem; font-weight: bold;">4</div>
+                <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">Découvrez</h4>
+                <p style="font-size: 0.9rem;">Explorez l'histoire, les ingrédients et la culture</p>
+            </div>
+        </div>
+    </section>
+
+    {% if not session.user_email %}
+    <section style="text-align: center; margin: 4rem 0;">
+        <div class="card" style="background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white; padding: 3rem;">
+            <h2 style="font-family: 'Playfair Display', serif; margin-bottom: 1rem;">
+                🎉 Prêt à Explorer la Cuisine Africaine ?
+            </h2>
+            <p style="font-size: 1.2rem; margin-bottom: 2rem; opacity: 0.9;">
+                Rejoignez des milliers d'utilisateurs qui découvrent déjà la richesse culinaire africaine
+            </p>
+            <a href="{{ url_for('register') }}" class="btn" style="background: white; color: var(--primary-color); font-weight: bold;">
+                <i class="fas fa-user-plus"></i> S'inscrire Gratuitement
+            </a>
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}

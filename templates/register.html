@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block title %}Inscription - AfriFood AI{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div style="max-width: 500px; margin: 4rem auto;">
+        <div class="card">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <i class="fas fa-user-plus" style="font-size: 3rem; color: var(--accent-color); margin-bottom: 1rem;"></i>
+                <h1 style="color: var(--primary-color); font-family: 'Playfair Display', serif;">Inscription</h1>
+                <p style="color: var(--charcoal);">Rejoignez la communauté AfriFood AI</p>
+            </div>
+
+            <form method="POST" id="registerForm">
+                <div class="form-group">
+                    <label for="email">
+                        <i class="fas fa-envelope"></i> Adresse Email
+                    </label>
+                    <input type="email" id="email" name="email" class="form-control" required 
+                           placeholder="votre@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i> Mot de Passe
+                    </label>
+                    <input type="password" id="password" name="password" class="form-control" required 
+                           placeholder="Choisissez un mot de passe sécurisé" minlength="6">
+                    <small style="color: var(--charcoal); font-size: 0.9rem;">
+                        Minimum 6 caractères
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">
+                        <i class="fas fa-lock"></i> Confirmer le Mot de Passe
+                    </label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required 
+                           placeholder="Confirmez votre mot de passe">
+                </div>
+
+                <div class="form-group">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                        <input type="checkbox" id="terms" required>
+                        <span style="font-size: 0.9rem;">
+                            J'accepte les conditions d'utilisation et la politique de confidentialité
+                        </span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">
+                    <i class="fas fa-user-plus"></i> Créer mon Compte
+                </button>
+            </form>
+
+            <div style="text-align: center; padding-top: 1rem; border-top: 1px solid #eee;">
+                <p style="color: var(--charcoal);">
+                    Déjà un compte ? 
+                    <a href="{{ url_for('login') }}" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">
+                        Se connecter
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Avantages de l'inscription -->
+        <div class="grid grid-2" style="margin-top: 2rem;">
+            <div class="card">
+                <h3 style="color: var(--forest-green); margin-bottom: 1rem; text-align: center;">
+                    <i class="fas fa-gift"></i> Gratuit à Vie
+                </h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-check" style="color: var(--success-color);"></i>
+                        Analyses illimitées
+                    </li>
+                    <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-check" style="color: var(--success-color);"></i>
+                        Historique complet
+                    </li>
+                    <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-check" style="color: var(--success-color);"></i>
+                        Statistiques détaillées
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3 style="color: var(--accent-color); margin-bottom: 1rem; text-align: center;">
+                    <i class="fas fa-shield-alt"></i> Sécurisé
+                </h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-check" style="color: var(--success-color);"></i>
+                        Données chiffrées
+                    </li>
+                    <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-check" style="color: var(--success-color);"></i>
+                        Respect de la vie privée
+                    </li>
+                    <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                        <i class="fas fa-check" style="color: var(--success-color);"></i>
+                        Aucun spam
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        if (password !== confirmPassword) {
+            alert('Les mots de passe ne correspondent pas.');
+            return;
+        }
+        
+        const formData = new FormData(e.target);
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        
+        // Afficher le loading
+        submitBtn.innerHTML = '<div class="loading"></div> Création...';
+        submitBtn.disabled = true;
+        
+        try {
+            const response = await fetch('/register', {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (response.ok) {
+                // Redirection gérée par le serveur
+                window.location.href = '/dashboard';
+            } else {
+                const result = await response.json();
+                alert('Erreur: ' + result.error);
+            }
+        } catch (error) {
+            alert('Erreur d\'inscription: ' + error.message);
+        } finally {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    });
+
+    // Validation en temps réel des mots de passe
+    document.getElementById('confirmPassword').addEventListener('input', function() {
+        const password = document.getElementById('password').value;
+        const confirmPassword = this.value;
+        
+        if (confirmPassword && password !== confirmPassword) {
+            this.style.borderColor = 'var(--error-color)';
+        } else {
+            this.style.borderColor = '#E0E0E0';
+        }
+    });
+</script>
+{% endblock %}

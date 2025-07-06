@@ -1,0 +1,569 @@
+{% extends "base.html" %}
+
+{% block title %}{{ plat.nom }} - AfriFood AI{% endblock %}
+
+{% block extra_css %}
+<style>
+    .plat-hero {
+        background: linear-gradient(135deg, {{ plat.couleur }}, {{ plat.couleur }}dd);
+        color: white;
+        padding: 4rem 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 3rem;
+    }
+
+    .plat-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 15px,
+            rgba(255,255,255,0.1) 15px,
+            rgba(255,255,255,0.1) 30px
+        );
+        animation: rotate 30s linear infinite;
+    }
+
+    .plat-hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .plat-emoji {
+        font-size: 6rem;
+        margin-bottom: 1rem;
+        display: block;
+        text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+
+    .plat-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .plat-subtitle {
+        font-size: 1.3rem;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+    }
+
+    .breadcrumb {
+        background: rgba(255,255,255,0.1);
+        padding: 1rem 2rem;
+        border-radius: 25px;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        backdrop-filter: blur(10px);
+    }
+
+    .breadcrumb a {
+        color: white;
+        text-decoration: none;
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
+    }
+
+    .breadcrumb a:hover {
+        opacity: 1;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        border-left: 5px solid {{ plat.couleur }};
+        transition: all 0.3s ease;
+    }
+
+    .info-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+    }
+
+    .info-card h3 {
+        color: {{ plat.couleur }};
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .ingredients-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .ingredient-item {
+        background: linear-gradient(45deg, {{ plat.couleur }}, {{ plat.couleur }}dd);
+        color: white;
+        padding: 0.8rem 1rem;
+        border-radius: 15px;
+        text-align: center;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .ingredient-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .nutrition-bar {
+        background: #f0f0f0;
+        border-radius: 10px;
+        height: 8px;
+        margin: 0.5rem 0;
+        overflow: hidden;
+    }
+
+    .nutrition-fill {
+        background: linear-gradient(90deg, {{ plat.couleur }}, var(--accent-color));
+        height: 100%;
+        border-radius: 10px;
+        transition: width 0.8s ease;
+    }
+
+    .recipe-steps {
+        background: linear-gradient(135deg, rgba(210, 105, 30, 0.05), rgba(255, 107, 53, 0.05));
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 2rem 0;
+    }
+
+    .step-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .step-number {
+        background: {{ plat.couleur }};
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+
+    .cultural-section {
+        background: linear-gradient(135deg, var(--dark-color), var(--charcoal));
+        color: white;
+        padding: 3rem;
+        border-radius: 20px;
+        margin: 3rem 0;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .cultural-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,215,0,0.1)"/></svg>') repeat;
+        background-size: 50px 50px;
+    }
+
+    .cultural-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin: 3rem 0;
+        flex-wrap: wrap;
+    }
+
+    .share-buttons {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        margin: 2rem 0;
+    }
+
+    .share-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .share-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .facebook { background: #3b5998; }
+    .twitter { background: #1da1f2; }
+    .whatsapp { background: #25d366; }
+    .pinterest { background: #bd081c; }
+
+    @media (max-width: 768px) {
+        .plat-title {
+            font-size: 2.5rem;
+        }
+        
+        .plat-emoji {
+            font-size: 4rem;
+        }
+        
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="plat-hero">
+    <div class="container">
+        <div class="plat-hero-content">
+            <div class="breadcrumb">
+                <a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Accueil</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="{{ url_for('plats_traditionnels_route') }}">Plats Traditionnels</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>{{ plat.nom }}</span>
+            </div>
+            
+            <span class="plat-emoji">{{ plat.emoji }}</span>
+            <h1 class="plat-title">{{ plat.nom }}</h1>
+            <p class="plat-subtitle">{{ plat.nom_local }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Description principale -->
+    <div class="card" style="margin-bottom: 3rem;">
+        <h2 style="color: {{ plat.couleur }}; margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">
+            <i class="fas fa-book-open"></i> À Propos de ce Plat
+        </h2>
+        <p style="font-size: 1.1rem; line-height: 1.8; color: var(--charcoal);">
+            {{ plat.description }}
+        </p>
+    </div>
+
+    <!-- Grille d'informations -->
+    <div class="info-grid">
+        <!-- Informations générales -->
+        <div class="info-card">
+            <h3><i class="fas fa-info-circle"></i> Informations Générales</h3>
+            <div style="display: grid; gap: 1rem;">
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                    <strong>Origine:</strong>
+                    <span>{{ plat.origine }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                    <strong>Région:</strong>
+                    <span>{{ plat.region or 'Non spécifiée' }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                    <strong>Temps de préparation:</strong>
+                    <span>{{ plat.temps_preparation }}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+                    <strong>Difficulté:</strong>
+                    <span style="color: {% if plat.difficulte == 'Facile' %}var(--success-color){% elif plat.difficulte == 'Difficile' %}var(--error-color){% else %}var(--warning-color){% endif %};">
+                        {{ plat.difficulte }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ingrédients -->
+        <div class="info-card">
+            <h3><i class="fas fa-leaf"></i> Ingrédients Principaux</h3>
+            {% if plat.ingredients %}
+            <div class="ingredients-grid">
+                {% for ingredient in plat.ingredients %}
+                <div class="ingredient-item">{{ ingredient }}</div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p style="color: var(--charcoal); font-style: italic;">Ingrédients non spécifiés</p>
+            {% endif %}
+        </div>
+
+        <!-- Valeur nutritive -->
+        <div class="info-card">
+            <h3><i class="fas fa-heart"></i> Valeur Nutritive</h3>
+            <p style="margin-bottom: 1rem;">{{ plat.valeur_nutritive }}</p>
+            
+            <!-- Barres nutritionnelles simulées -->
+            <div style="margin-top: 1.5rem;">
+                <div style="margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+                        <span>Protéines</span>
+                        <span>85%</span>
+                    </div>
+                    <div class="nutrition-bar">
+                        <div class="nutrition-fill" style="width: 85%;"></div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 1rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+                        <span>Vitamines</span>
+                        <span>92%</span>
+                    </div>
+                    <div class="nutrition-bar">
+                        <div class="nutrition-fill" style="width: 92%;"></div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+                        <span>Minéraux</span>
+                        <span>78%</span>
+                    </div>
+                    <div class="nutrition-bar">
+                        <div class="nutrition-fill" style="width: 78%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conseils de préparation -->
+        <div class="info-card">
+            <h3><i class="fas fa-utensils"></i> Conseils de Préparation</h3>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+                    Utilisez des ingrédients frais et locaux
+                </li>
+                <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+                    Respectez les temps de cuisson traditionnels
+                </li>
+                <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+                    Préparez avec amour et patience
+                </li>
+                <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+                    Partagez en famille ou entre amis
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Section culturelle -->
+    {% if plat.histoire %}
+    <div class="cultural-section">
+        <div class="cultural-content">
+            <h2 style="color: var(--gold-yellow); margin-bottom: 2rem; text-align: center; font-family: 'Playfair Display', serif;">
+                <i class="fas fa-scroll"></i> Histoire & Tradition
+            </h2>
+            <p style="font-size: 1.1rem; line-height: 1.8; text-align: center; max-width: 800px; margin: 0 auto;">
+                {{ plat.histoire }}
+            </p>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Étapes de préparation simulées -->
+    <div class="recipe-steps">
+        <h2 style="color: var(--primary-color); margin-bottom: 2rem; text-align: center; font-family: 'Playfair Display', serif;">
+            <i class="fas fa-list-ol"></i> Étapes de Préparation Traditionnelle
+        </h2>
+        
+        <div class="step-item">
+            <div class="step-number">1</div>
+            <div>
+                <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">Préparation des ingrédients</h4>
+                <p>Rassemblez et préparez tous les ingrédients selon les méthodes traditionnelles. Nettoyez soigneusement les légumes et épices.</p>
+            </div>
+        </div>
+        
+        <div class="step-item">
+            <div class="step-number">2</div>
+            <div>
+                <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">Cuisson de base</h4>
+                <p>Commencez par la cuisson des éléments principaux en respectant l'ordre traditionnel et les temps de cuisson ancestraux.</p>
+            </div>
+        </div>
+        
+        <div class="step-item">
+            <div class="step-number">3</div>
+            <div>
+                <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">Assemblage et assaisonnement</h4>
+                <p>Assemblez les différents composants et ajoutez les épices selon les proportions traditionnelles transmises de génération en génération.</p>
+            </div>
+        </div>
+        
+        <div class="step-item">
+            <div class="step-number">4</div>
+            <div>
+                <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">Finition et service</h4>
+                <p>Laissez mijoter pour que les saveurs se mélangent parfaitement, puis servez chaud selon la tradition locale.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Boutons d'action -->
+    <div class="action-buttons">
+        {% if session.user_email %}
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+            <i class="fas fa-camera"></i> Analyser ce Plat
+        </a>
+        <button class="btn btn-secondary" onclick="addToFavorites('{{ nom_plat }}')">
+            <i class="fas fa-heart"></i> Ajouter aux Favoris
+        </button>
+        {% else %}
+        <a href="{{ url_for('register') }}" class="btn btn-primary">
+            <i class="fas fa-user-plus"></i> S'inscrire pour Analyser
+        </a>
+        {% endif %}
+        <a href="{{ url_for('plats_traditionnels_route') }}" class="btn" style="background: var(--charcoal); color: white;">
+            <i class="fas fa-arrow-left"></i> Retour aux Plats
+        </a>
+    </div>
+
+    <!-- Boutons de partage -->
+    <div style="text-align: center; margin: 3rem 0;">
+        <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">Partagez cette Découverte</h3>
+        <div class="share-buttons">
+            <a href="#" class="share-btn facebook" title="Partager sur Facebook">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="share-btn twitter" title="Partager sur Twitter">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="share-btn whatsapp" title="Partager sur WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="#" class="share-btn pinterest" title="Partager sur Pinterest">
+                <i class="fab fa-pinterest"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Animation des barres nutritionnelles
+    window.addEventListener('load', () => {
+        const nutritionBars = document.querySelectorAll('.nutrition-fill');
+        nutritionBars.forEach((bar, index) => {
+            setTimeout(() => {
+                bar.style.width = bar.style.width;
+            }, index * 200);
+        });
+    });
+
+    // Fonction pour ajouter aux favoris
+    function addToFavorites(platName) {
+        const btn = event.target;
+        const originalText = btn.innerHTML;
+        
+        btn.innerHTML = '<i class="fas fa-check"></i> Ajouté aux Favoris !';
+        btn.style.background = 'var(--success-color)';
+        btn.disabled = true;
+        
+        setTimeout(() => {
+            btn.innerHTML = '<i class="fas fa-heart"></i> Dans vos Favoris';
+            btn.style.background = 'var(--gold-yellow)';
+            btn.style.color = 'var(--dark-color)';
+        }, 2000);
+        
+        console.log('Plat ajouté aux favoris:', platName);
+    }
+
+    // Gestion du partage
+    document.querySelectorAll('.share-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const platform = btn.classList[1];
+            const url = encodeURIComponent(window.location.href);
+            const title = encodeURIComponent('{{ plat.nom }} - Découvrez ce délicieux plat africain !');
+            
+            let shareUrl = '';
+            switch(platform) {
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+                    break;
+                case 'whatsapp':
+                    shareUrl = `https://wa.me/?text=${title} ${url}`;
+                    break;
+                case 'pinterest':
+                    shareUrl = `https://pinterest.com/pin/create/button/?url=${url}&description=${title}`;
+                    break;
+            }
+            
+            if (shareUrl) {
+                window.open(shareUrl, '_blank', 'width=600,height=400');
+            }
+        });
+    });
+
+    // Animation d'apparition des éléments
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.info-card, .step-item, .cultural-section').forEach(el => {
+        observer.observe(el);
+    });
+</script>
+{% endblock %}

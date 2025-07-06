@@ -1,0 +1,6 @@
+Flask==2.3.3
+tf-nightly
+Pillow
+numpy
+Werkzeug
+gunicorn

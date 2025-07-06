@@ -1,0 +1,435 @@
+{% extends "base.html" %}
+
+{% block title %}Plats Traditionnels - AfriFood AI{% endblock %}
+
+{% block extra_css %}
+<style>
+    .plat-card {
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        position: relative;
+        border: 3px solid transparent;
+    }
+
+    .plat-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    }
+
+    .plat-header {
+        padding: 2rem;
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        color: white;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .plat-header::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(255,255,255,0.1) 10px,
+            rgba(255,255,255,0.1) 20px
+        );
+        animation: rotate 20s linear infinite;
+    }
+
+    .plat-emoji {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        display: block;
+        position: relative;
+        z-index: 2;
+    }
+
+    .plat-name {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        position: relative;
+        z-index: 2;
+    }
+
+    .plat-origin {
+        font-size: 1rem;
+        opacity: 0.9;
+        position: relative;
+        z-index: 2;
+    }
+
+    .plat-content {
+        padding: 2rem;
+    }
+
+    .plat-description {
+        color: var(--charcoal);
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+    }
+
+    .plat-details {
+        display: grid;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .detail-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--dark-color);
+    }
+
+    .detail-icon {
+        color: var(--primary-color);
+        width: 20px;
+    }
+
+    .ingredients-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .ingredient-tag {
+        background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .plat-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        padding-top: 1rem;
+        border-top: 1px solid #eee;
+    }
+
+    .filter-section {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+
+    .filter-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: center;
+    }
+
+    .filter-btn {
+        padding: 0.8rem 1.5rem;
+        border: 2px solid var(--primary-color);
+        background: white;
+        color: var(--primary-color);
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+        background: var(--primary-color);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .search-box {
+        max-width: 400px;
+        margin: 0 auto 2rem;
+        position: relative;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 1rem 1rem 1rem 3rem;
+        border: 2px solid #E0E0E0;
+        border-radius: 25px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(210, 105, 30, 0.1);
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--primary-color);
+    }
+
+    @media (max-width: 768px) {
+        .filter-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .filter-btn {
+            width: 100%;
+            max-width: 200px;
+        }
+        
+        .plat-actions {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">📚 Encyclopédie des Plats Africains</h1>
+            <p class="hero-subtitle">
+                Explorez la richesse culinaire de l'Afrique. Chaque plat raconte une histoire, 
+                porte une tradition et révèle l'âme d'un peuple.
+            </p>
+        </div>
+    </section>
+
+    <!-- Section de recherche et filtres -->
+    <div class="filter-section">
+        <div class="search-box">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="Rechercher un plat...">
+        </div>
+        
+        <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">
+                <i class="fas fa-globe-africa"></i> Tous les Plats
+            </button>
+            <button class="filter-btn" data-filter="cameroun">
+                <i class="fas fa-flag"></i> Cameroun
+            </button>
+            <button class="filter-btn" data-filter="ghana">
+                <i class="fas fa-flag"></i> Ghana
+            </button>
+            <button class="filter-btn" data-filter="ouest-africain">
+                <i class="fas fa-map"></i> Afrique de l'Ouest
+            </button>
+        </div>
+    </div>
+
+    <!-- Grille des plats -->
+    <div class="grid grid-2" id="platsGrid">
+        {% for nom_plat, plat in plats.items() %}
+        <div class="plat-card" data-origine="{{ plat.origine.lower() }}" data-nom="{{ plat.nom.lower() }}">
+            <div class="plat-header" style="background: linear-gradient(135deg, {{ plat.couleur }}, {{ plat.couleur }}dd);">
+                <span class="plat-emoji">{{ plat.emoji }}</span>
+                <h2 class="plat-name">{{ plat.nom }}</h2>
+                <p class="plat-origin">
+                    <i class="fas fa-map-marker-alt"></i> {{ plat.origine }}
+                    {% if plat.region %} - {{ plat.region }}{% endif %}
+                </p>
+            </div>
+            
+            <div class="plat-content">
+                <p class="plat-description">{{ plat.description }}</p>
+                
+                <div class="plat-details">
+                    <div class="detail-item">
+                        <i class="fas fa-clock detail-icon"></i>
+                        <span>Temps de préparation: {{ plat.temps_preparation }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-chart-line detail-icon"></i>
+                        <span>Difficulté: {{ plat.difficulte }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-heart detail-icon"></i>
+                        <span>{{ plat.valeur_nutritive }}</span>
+                    </div>
+                </div>
+
+                {% if plat.ingredients %}
+                <div>
+                    <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">
+                        <i class="fas fa-leaf"></i> Ingrédients Principaux
+                    </h4>
+                    <div class="ingredients-list">
+                        {% for ingredient in plat.ingredients[:5] %}
+                        <span class="ingredient-tag">{{ ingredient }}</span>
+                        {% endfor %}
+                        {% if plat.ingredients|length > 5 %}
+                        <span class="ingredient-tag" style="background: var(--charcoal);">
+                            +{{ plat.ingredients|length - 5 }} autres
+                        </span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="plat-actions">
+                    <a href="{{ url_for('detail_plat', nom_plat=nom_plat) }}" class="btn btn-primary">
+                        <i class="fas fa-eye"></i> Voir Détails
+                    </a>
+                    {% if session.user_email %}
+                    <button class="btn btn-secondary" onclick="addToFavorites('{{ nom_plat }}')">
+                        <i class="fas fa-heart"></i> Favoris
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Message si aucun résultat -->
+    <div id="noResults" style="display: none; text-align: center; padding: 4rem 2rem;">
+        <i class="fas fa-search" style="font-size: 4rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+        <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">Aucun plat trouvé</h3>
+        <p style="color: var(--charcoal);">Essayez avec d'autres mots-clés ou filtres.</p>
+    </div>
+
+    <!-- Section statistiques -->
+    <section style="margin-top: 4rem;">
+        <h2 class="section-title">📊 Statistiques de notre Collection</h2>
+        <div class="grid grid-4">
+            <div class="card" style="text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white;">
+                <h3 style="font-size: 2.5rem; margin-bottom: 0.5rem;">{{ plats|length }}</h3>
+                <p>Plats Référencés</p>
+            </div>
+            <div class="card" style="text-align: center; background: linear-gradient(135deg, var(--forest-green), var(--success-color)); color: white;">
+                <h3 style="font-size: 2.5rem; margin-bottom: 0.5rem;">3</h3>
+                <p>Pays Représentés</p>
+            </div>
+            <div class="card" style="text-align: center; background: linear-gradient(135deg, var(--gold-yellow), #DAA520); color: var(--dark-color);">
+                <h3 style="font-size: 2.5rem; margin-bottom: 0.5rem;">∞</h3>
+                <p>Saveurs Uniques</p>
+            </div>
+            <div class="card" style="text-align: center; background: linear-gradient(135deg, var(--clay-red), #8B0000); color: white;">
+                <h3 style="font-size: 2.5rem; margin-bottom: 0.5rem;">100%</h3>
+                <p>Authenticité</p>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Gestion des filtres
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const platCards = document.querySelectorAll('.plat-card');
+    const searchInput = document.getElementById('searchInput');
+    const noResults = document.getElementById('noResults');
+
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Mettre à jour les boutons actifs
+            filterButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            
+            // Filtrer les plats
+            filterPlats();
+        });
+    });
+
+    searchInput.addEventListener('input', filterPlats);
+
+    function filterPlats() {
+        const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+        const searchTerm = searchInput.value.toLowerCase();
+        let visibleCount = 0;
+
+        platCards.forEach(card => {
+            const origine = card.dataset.origine;
+            const nom = card.dataset.nom;
+            
+            let showCard = true;
+
+            // Filtre par origine
+            if (activeFilter !== 'all') {
+                if (activeFilter === 'cameroun' && origine !== 'cameroun') {
+                    showCard = false;
+                } else if (activeFilter === 'ghana' && origine !== 'ghana') {
+                    showCard = false;
+                } else if (activeFilter === 'ouest-africain' && !origine.includes('ouest')) {
+                    showCard = false;
+                }
+            }
+
+            // Filtre par recherche
+            if (searchTerm && !nom.includes(searchTerm)) {
+                showCard = false;
+            }
+
+            if (showCard) {
+                card.style.display = 'block';
+                card.classList.add('fade-in');
+                visibleCount++;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Afficher/masquer le message "aucun résultat"
+        noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+
+    // Fonction pour ajouter aux favoris (simulation)
+    function addToFavorites(platName) {
+        // Animation du bouton
+        const btn = event.target;
+        const originalText = btn.innerHTML;
+        
+        btn.innerHTML = '<i class="fas fa-check"></i> Ajouté !';
+        btn.style.background = 'var(--success-color)';
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = '';
+        }, 2000);
+        
+        // Ici vous pourriez ajouter la logique pour sauvegarder en base de données
+        console.log('Plat ajouté aux favoris:', platName);
+    }
+
+    // Animation d'apparition des cartes
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+            }
+        });
+    }, observerOptions);
+
+    platCards.forEach(card => {
+        observer.observe(card);
+    });
+</script>
+{% endblock %}

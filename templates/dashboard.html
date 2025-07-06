@@ -1,0 +1,513 @@
+{% extends "base.html" %}
+
+{% block title %}Tableau de bord - AfriFood AI{% endblock %}
+
+{% block extra_css %}
+<style>
+    .upload-area {
+        border: 3px dashed var(--primary-color);
+        border-radius: 20px;
+        padding: 3rem;
+        text-align: center;
+        background: linear-gradient(135deg, rgba(210, 105, 30, 0.05), rgba(255, 107, 53, 0.05));
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .upload-area:hover {
+        border-color: var(--accent-color);
+        background: linear-gradient(135deg, rgba(210, 105, 30, 0.1), rgba(255, 107, 53, 0.1));
+        transform: translateY(-5px);
+    }
+
+    .upload-area.dragover {
+        border-color: var(--success-color);
+        background: linear-gradient(135deg, rgba(45, 80, 22, 0.1), rgba(45, 80, 22, 0.05));
+    }
+
+    .camera-section {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        margin: 2rem 0;
+    }
+
+    .camera-controls {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin: 1rem 0;
+        flex-wrap: wrap;
+    }
+
+    #videoElement {
+        width: 100%;
+        max-width: 500px;
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+
+    #canvas {
+        display: none;
+    }
+
+    .prediction-result {
+        background: linear-gradient(135deg, var(--success-color), var(--forest-green));
+        color: white;
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 2rem 0;
+        text-align: center;
+        box-shadow: 0 10px 40px rgba(45, 80, 22, 0.2);
+    }
+
+    .confidence-bar {
+        background: rgba(255,255,255,0.2);
+        border-radius: 10px;
+        height: 10px;
+        margin: 1rem 0;
+        overflow: hidden;
+    }
+
+    .confidence-fill {
+        background: var(--gold-yellow);
+        height: 100%;
+        border-radius: 10px;
+        transition: width 0.8s ease;
+    }
+
+    .plat-info {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 2rem 0;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+
+    .ingredient-tag {
+        display: inline-block;
+        background: var(--primary-color);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        margin: 0.2rem;
+    }
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+
+    .stat-card {
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        color: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 8px 25px rgba(210, 105, 30, 0.2);
+    }
+
+    .stat-number {
+        font-size: 2rem;
+        font-weight: bold;
+        display: block;
+    }
+
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.8);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+    .loading-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 20px;
+        text-align: center;
+        max-width: 300px;
+    }
+
+    .loading-spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .camera-controls {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .upload-area {
+            padding: 2rem 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">🎯 Tableau de Bord</h1>
+            <p class="hero-subtitle">
+                Bienvenue {{ session.user_email }}! Analysez vos plats africains préférés avec notre IA avancée.
+            </p>
+        </div>
+    </section>
+
+    <!-- Statistiques utilisateur -->
+    <div class="stats-grid" id="userStats">
+        <div class="stat-card">
+            <span class="stat-number" id="totalPredictions">-</span>
+            <span>Analyses Effectuées</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number" id="favoriteFood">-</span>
+            <span>Plat Favori</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-number" id="memberSince">-</span>
+            <span>Membre Depuis</span>
+        </div>
+    </div>
+
+    <div class="grid grid-2">
+        <!-- Section Upload -->
+        <div class="card">
+            <h2 style="color: var(--primary-color); margin-bottom: 1.5rem; text-align: center;">
+                <i class="fas fa-cloud-upload-alt"></i> Télécharger une Image
+            </h2>
+            
+            <div class="upload-area" id="uploadArea">
+                <i class="fas fa-camera" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+                <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">Glissez votre image ici</h3>
+                <p style="color: var(--charcoal); margin-bottom: 1.5rem;">ou cliquez pour sélectionner un fichier</p>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                <div class="btn btn-primary">
+                    <i class="fas fa-folder-open"></i> Choisir une Image
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Caméra -->
+        <div class="card">
+            <h2 style="color: var(--accent-color); margin-bottom: 1.5rem; text-align: center;">
+                <i class="fas fa-video"></i> Prendre une Photo
+            </h2>
+            
+            <div class="camera-section">
+                <div style="text-align: center; margin-bottom: 1rem;">
+                    <video id="videoElement" autoplay playsinline style="display: none;"></video>
+                    <div id="cameraPlaceholder" style="background: #f0f0f0; border-radius: 15px; padding: 3rem; color: var(--charcoal);">
+                        <i class="fas fa-camera" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>Cliquez sur "Activer la Caméra" pour commencer</p>
+                    </div>
+                </div>
+                
+                <div class="camera-controls">
+                    <button id="startCamera" class="btn btn-secondary">
+                        <i class="fas fa-video"></i> Activer la Caméra
+                    </button>
+                    <button id="capturePhoto" class="btn btn-primary" style="display: none;">
+                        <i class="fas fa-camera"></i> Capturer
+                    </button>
+                    <button id="stopCamera" class="btn" style="background: var(--error-color); color: white; display: none;">
+                        <i class="fas fa-stop"></i> Arrêter
+                    </button>
+                </div>
+            </div>
+            
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+
+    <!-- Résultat de la prédiction -->
+    <div id="predictionResult" style="display: none;">
+        <div class="prediction-result">
+            <h2 id="predictedDish">🍽️ Plat Identifié</h2>
+            <div class="confidence-bar">
+                <div class="confidence-fill" id="confidenceBar"></div>
+            </div>
+            <p id="confidenceText">Confiance: 0%</p>
+        </div>
+
+        <div class="plat-info" id="platInfo">
+            <!-- Les informations du plat seront insérées ici -->
+        </div>
+    </div>
+</div>
+
+<!-- Overlay de chargement -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+        <div class="loading-spinner"></div>
+        <h3 style="color: var(--primary-color);">Analyse en cours...</h3>
+        <p>Notre IA examine votre plat</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let stream = null;
+    const video = document.getElementById('videoElement');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Charger les statistiques utilisateur
+    async function loadUserStats() {
+        try {
+            const response = await fetch('/api/user-stats');
+            const data = await response.json();
+            
+            document.getElementById('totalPredictions').textContent = data.total_predictions;
+            
+            // Trouver le plat le plus prédit
+            const platsPredits = data.plats_predits;
+            let platFavori = 'Aucun';
+            let maxCount = 0;
+            for (const [plat, count] of Object.entries(platsPredits)) {
+                if (count > maxCount) {
+                    maxCount = count;
+                    platFavori = plat.charAt(0).toUpperCase() + plat.slice(1);
+                }
+            }
+            document.getElementById('favoriteFood').textContent = platFavori;
+            
+            // Date d'inscription
+            const memberDate = new Date(data.membre_depuis);
+            const options = { year: 'numeric', month: 'long' };
+            document.getElementById('memberSince').textContent = memberDate.toLocaleDateString('fr-FR', options);
+        } catch (error) {
+            console.error('Erreur lors du chargement des statistiques:', error);
+        }
+    }
+
+    // Gestion de l'upload par glisser-déposer
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+
+    uploadArea.addEventListener('click', () => fileInput.click());
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.classList.add('dragover');
+    });
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.classList.remove('dragover');
+    });
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFileUpload(files[0]);
+        }
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            handleFileUpload(e.target.files[0]);
+        }
+    });
+
+    // Gestion de la caméra
+    document.getElementById('startCamera').addEventListener('click', async () => {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ 
+                video: { 
+                    facingMode: 'environment',
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                } 
+            });
+            video.srcObject = stream;
+            video.style.display = 'block';
+            document.getElementById('cameraPlaceholder').style.display = 'none';
+            document.getElementById('startCamera').style.display = 'none';
+            document.getElementById('capturePhoto').style.display = 'inline-block';
+            document.getElementById('stopCamera').style.display = 'inline-block';
+        } catch (error) {
+            alert('Erreur d\'accès à la caméra: ' + error.message);
+        }
+    });
+
+    document.getElementById('capturePhoto').addEventListener('click', () => {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0);
+        
+        canvas.toBlob((blob) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                predictFromBase64(reader.result);
+            };
+            reader.readAsDataURL(blob);
+        }, 'image/jpeg', 0.8);
+    });
+
+    document.getElementById('stopCamera').addEventListener('click', () => {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            stream = null;
+        }
+        video.style.display = 'none';
+        document.getElementById('cameraPlaceholder').style.display = 'block';
+        document.getElementById('startCamera').style.display = 'inline-block';
+        document.getElementById('capturePhoto').style.display = 'none';
+        document.getElementById('stopCamera').style.display = 'none';
+    });
+
+    // Gestion de l'upload de fichier
+    async function handleFileUpload(file) {
+        if (!file.type.startsWith('image/')) {
+            alert('Veuillez sélectionner un fichier image.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        showLoading();
+        
+        try {
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            hideLoading();
+            
+            if (response.ok) {
+                displayPrediction(result);
+            } else {
+                alert('Erreur: ' + result.error);
+            }
+        } catch (error) {
+            hideLoading();
+            alert('Erreur lors de l\'analyse: ' + error.message);
+        }
+    }
+
+    // Prédiction à partir d'une image base64
+    async function predictFromBase64(imageData) {
+        showLoading();
+        
+        try {
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ image_data: imageData })
+            });
+            
+            const result = await response.json();
+            hideLoading();
+            
+            if (response.ok) {
+                displayPrediction(result);
+            } else {
+                alert('Erreur: ' + result.error);
+            }
+        } catch (error) {
+            hideLoading();
+            alert('Erreur lors de l\'analyse: ' + error.message);
+        }
+    }
+
+    // Affichage des résultats
+    function displayPrediction(result) {
+        const predictionDiv = document.getElementById('predictionResult');
+        const platInfo = result.plat_info;
+        
+        // Mise à jour du plat identifié
+        document.getElementById('predictedDish').innerHTML = 
+            `${platInfo.emoji || '🍽️'} ${platInfo.nom || result.predicted_class}`;
+        
+        // Mise à jour de la barre de confiance
+        const confidence = Math.round(result.confidence * 100);
+        document.getElementById('confidenceBar').style.width = confidence + '%';
+        document.getElementById('confidenceText').textContent = `Confiance: ${confidence}%`;
+        
+        // Informations détaillées du plat
+        const platInfoDiv = document.getElementById('platInfo');
+        platInfoDiv.innerHTML = `
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                <div>
+                    <h3 style="color: var(--primary-color); margin-bottom: 1rem;">
+                        <i class="fas fa-info-circle"></i> Informations Générales
+                    </h3>
+                    <p><strong>Nom local:</strong> ${platInfo.nom_local || platInfo.nom}</p>
+                    <p><strong>Origine:</strong> ${platInfo.origine}</p>
+                    <p><strong>Région:</strong> ${platInfo.region || 'Non spécifiée'}</p>
+                    <p><strong>Temps de préparation:</strong> ${platInfo.temps_preparation || 'Variable'}</p>
+                    <p><strong>Difficulté:</strong> ${platInfo.difficulte || 'Moyenne'}</p>
+                </div>
+                
+                <div>
+                    <h3 style="color: var(--accent-color); margin-bottom: 1rem;">
+                        <i class="fas fa-leaf"></i> Ingrédients Principaux
+                    </h3>
+                    <div style="margin-bottom: 1rem;">
+                        ${platInfo.ingredients ? platInfo.ingredients.map(ing => 
+                            `<span class="ingredient-tag">${ing}</span>`
+                        ).join('') : 'Non spécifiés'}
+                    </div>
+                    
+                    <h4 style="color: var(--forest-green); margin: 1rem 0 0.5rem;">Valeur Nutritive</h4>
+                    <p style="font-size: 0.9rem;">${platInfo.valeur_nutritive || 'Information non disponible'}</p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(210, 105, 30, 0.1), rgba(255, 107, 53, 0.1)); border-radius: 15px;">
+                <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">
+                    <i class="fas fa-book-open"></i> Description
+                </h3>
+                <p style="line-height: 1.8;">${platInfo.description || 'Description non disponible'}</p>
+                
+                ${platInfo.histoire ? `
+                    <h4 style="color: var(--forest-green); margin: 1.5rem 0 0.5rem;">Histoire & Tradition</h4>
+                    <p style="font-style: italic; line-height: 1.8;">${platInfo.histoire}</p>
+                ` : ''}
+            </div>
+        `;
+        
+        predictionDiv.style.display = 'block';
+        predictionDiv.scrollIntoView({ behavior: 'smooth' });
+        
+        // Recharger les statistiques
+        loadUserStats();
+    }
+
+    function showLoading() {
+        document.getElementById('loadingOverlay').style.display = 'flex';
+    }
+
+    function hideLoading() {
+        document.getElementById('loadingOverlay').style.display = 'none';
+    }
+
+    // Charger les statistiques au chargement de la page
+    loadUserStats();
+</script>
+{% endblock %}
