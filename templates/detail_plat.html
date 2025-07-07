@@ -240,6 +240,118 @@
     .whatsapp { background: #25d366; }
     .pinterest { background: #bd081c; }
 
+    /* Styles pour la section vidéos */
+    .videos-section {
+        background: linear-gradient(135deg, rgba(255, 107, 53, 0.05), rgba(210, 105, 30, 0.05));
+        border-radius: 20px;
+        padding: 2rem;
+        margin: 3rem 0;
+    }
+
+    .video-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .video-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .video-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        border-color: {{ plat.couleur }};
+    }
+
+    .video-thumbnail {
+        position: relative;
+        background: linear-gradient(135deg, {{ plat.couleur }}, {{ plat.couleur }}dd);
+        height: 180px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 3rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .video-thumbnail:hover {
+        background: linear-gradient(135deg, {{ plat.couleur }}dd, {{ plat.couleur }});
+    }
+
+    .video-thumbnail::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(255,255,255,0.1) 10px,
+            rgba(255,255,255,0.1) 20px
+        );
+    }
+
+    .play-icon {
+        position: relative;
+        z-index: 2;
+        background: rgba(255,255,255,0.2);
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(10px);
+    }
+
+    .video-info {
+        padding: 1.5rem;
+    }
+
+    .video-title {
+        font-weight: 700;
+        color: var(--dark-color);
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .video-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        color: var(--charcoal);
+    }
+
+    .video-duration {
+        background: {{ plat.couleur }};
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 600;
+    }
+
+    .video-language {
+        background: rgba(210, 105, 30, 0.1);
+        color: {{ plat.couleur }};
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-weight: 600;
+    }
+
     @media (max-width: 768px) {
         .plat-title {
             font-size: 2.5rem;
@@ -256,6 +368,10 @@
         .action-buttons {
             flex-direction: column;
             align-items: center;
+        }
+
+        .video-grid {
+            grid-template-columns: 1fr;
         }
     }
 </style>
@@ -290,6 +406,41 @@
             {{ plat.description }}
         </p>
     </div>
+
+    <!-- Section Vidéos de Préparation -->
+    {% if plat.videos_preparation %}
+    <div class="videos-section">
+        <h2 style="color: {{ plat.couleur }}; margin-bottom: 1rem; text-align: center; font-family: 'Playfair Display', serif;">
+            <i class="fas fa-video"></i> Apprenez à Préparer {{ plat.nom }}
+        </h2>
+        <p style="text-align: center; color: var(--charcoal); margin-bottom: 2rem;">
+            Découvrez les secrets de préparation grâce à ces vidéos détaillées
+        </p>
+        
+        <div class="video-grid">
+            {% for video in plat.videos_preparation %}
+            <div class="video-card">
+                <div class="video-thumbnail" onclick="openVideo('{{ video.url }}')">
+                    <div class="play-icon">
+                        <i class="fas fa-play"></i>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h4 class="video-title">{{ video.titre }}</h4>
+                    <div class="video-meta">
+                        <span class="video-duration">
+                            <i class="fas fa-clock"></i> {{ video.duree }}
+                        </span>
+                        <span class="video-language">
+                            <i class="fas fa-globe"></i> {{ video.langue }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Grille d'informations -->
     <div class="info-grid">
@@ -500,6 +651,18 @@
         });
     });
 
+    // Fonction pour ouvrir une vidéo
+    function openVideo(url) {
+        // Ouvrir la vidéo dans un nouvel onglet
+        window.open(url, '_blank');
+        
+        // Optionnel: Ajouter une animation de clic
+        event.target.closest('.video-thumbnail').style.transform = 'scale(0.95)';
+        setTimeout(() => {
+            event.target.closest('.video-thumbnail').style.transform = 'scale(1)';
+        }, 150);
+    }
+
     // Fonction pour ajouter aux favoris
     function addToFavorites(platName) {
         const btn = event.target;
@@ -562,7 +725,7 @@
         });
     }, observerOptions);
 
-    document.querySelectorAll('.info-card, .step-item, .cultural-section').forEach(el => {
+    document.querySelectorAll('.info-card, .step-item, .cultural-section, .video-card').forEach(el => {
         observer.observe(el);
     });
 </script>

@@ -120,6 +120,7 @@
         justify-content: center;
         padding-top: 1rem;
         border-top: 1px solid #eee;
+        flex-wrap: wrap;
     }
 
     .filter-section {
@@ -186,6 +187,34 @@
         color: var(--primary-color);
     }
 
+    /* Badge pour les vidéos disponibles */
+    .video-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: var(--accent-color);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        z-index: 3;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+    }
+
+    .video-count {
+        background: rgba(255,255,255,0.2);
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+    }
+
     @media (max-width: 768px) {
         .filter-buttons {
             flex-direction: column;
@@ -243,6 +272,14 @@
     <div class="grid grid-2" id="platsGrid">
         {% for nom_plat, plat in plats.items() %}
         <div class="plat-card" data-origine="{{ plat.origine.lower() }}" data-nom="{{ plat.nom.lower() }}">
+            <!-- Badge pour les vidéos disponibles -->
+            {% if plat.videos_preparation %}
+            <div class="video-badge">
+                <i class="fas fa-video"></i>
+                <span class="video-count">{{ plat.videos_preparation|length }}</span>
+            </div>
+            {% endif %}
+            
             <div class="plat-header" style="background: linear-gradient(135deg, {{ plat.couleur }}, {{ plat.couleur }}dd);">
                 <span class="plat-emoji">{{ plat.emoji }}</span>
                 <h2 class="plat-name">{{ plat.nom }}</h2>
@@ -268,6 +305,12 @@
                         <i class="fas fa-heart detail-icon"></i>
                         <span>{{ plat.valeur_nutritive }}</span>
                     </div>
+                    {% if plat.videos_preparation %}
+                    <div class="detail-item">
+                        <i class="fas fa-video detail-icon"></i>
+                        <span>{{ plat.videos_preparation|length }} vidéo(s) de préparation</span>
+                    </div>
+                    {% endif %}
                 </div>
 
                 {% if plat.ingredients %}
@@ -292,8 +335,13 @@
                     <a href="{{ url_for('detail_plat', nom_plat=nom_plat) }}" class="btn btn-primary">
                         <i class="fas fa-eye"></i> Voir Détails
                     </a>
+                    {% if plat.videos_preparation %}
+                    <a href="{{ url_for('detail_plat', nom_plat=nom_plat) }}#videos" class="btn btn-secondary">
+                        <i class="fas fa-video"></i> Voir Vidéos
+                    </a>
+                    {% endif %}
                     {% if session.user_email %}
-                    <button class="btn btn-secondary" onclick="addToFavorites('{{ nom_plat }}')">
+                    <button class="btn" style="background: var(--forest-green); color: white;" onclick="addToFavorites('{{ nom_plat }}')">
                         <i class="fas fa-heart"></i> Favoris
                     </button>
                     {% endif %}
@@ -323,8 +371,11 @@
                 <p>Pays Représentés</p>
             </div>
             <div class="card" style="text-align: center; background: linear-gradient(135deg, var(--gold-yellow), #DAA520); color: var(--dark-color);">
-                <h3 style="font-size: 2.5rem; margin-bottom: 0.5rem;">∞</h3>
-                <p>Saveurs Uniques</p>
+                <h3 style="font-size: 2.5rem; margin-bottom: 0.5rem;">
+                    {% set total_videos = plats.values() | selectattr('videos_preparation') | map(attribute='videos_preparation') | map('length') | sum %}
+                    {{ total_videos }}
+                </h3>
+                <p>Vidéos Disponibles</p>
             </div>
             <div class="card" style="text-align: center; background: linear-gradient(135deg, var(--clay-red), #8B0000); color: white;">
                 <h3 style="font-size: 2.5rem; margin-bottom: 0.5rem;">100%</h3>
@@ -407,7 +458,7 @@
         
         setTimeout(() => {
             btn.innerHTML = originalText;
-            btn.style.background = '';
+            btn.style.background = 'var(--forest-green)';
         }, 2000);
         
         // Ici vous pourriez ajouter la logique pour sauvegarder en base de données

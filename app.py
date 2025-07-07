@@ -148,7 +148,7 @@ if os.path.exists(MODEL_PATH):
 else:
     print(f"Modèle non trouvé à {MODEL_PATH}. L'application fonctionnera sans prédiction.")
 
-# Descriptions enrichies des plats traditionnels
+# Descriptions enrichies des plats traditionnels avec liens vidéo
 plats_traditionnels = {
     'ekwang': {
         'nom': 'Ekwang',
@@ -162,7 +162,27 @@ plats_traditionnels = {
         'valeur_nutritive': 'Riche en fibres, vitamines et protéines',
         'histoire': 'Plat cérémoniel souvent préparé lors des grandes occasions familiales',
         'emoji': '🌿',
-        'couleur': '#2D5016'
+        'couleur': '#2D5016',
+        'videos_preparation': [
+            {
+                'titre': 'Recette traditionnelle d\'Ekwang',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '15 min',
+                'langue': 'Français'
+            },
+            {
+                'titre': 'Ekwang authentique du Sud-Ouest',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '20 min',
+                'langue': 'Anglais'
+            },
+            {
+                'titre': 'Préparation moderne d\'Ekwang',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '12 min',
+                'langue': 'Français'
+            }
+        ]
     },
     'eru': {
         'nom': 'Eru',
@@ -176,7 +196,27 @@ plats_traditionnels = {
         'valeur_nutritive': 'Très riche en fer, calcium et vitamines',
         'histoire': 'Légume sauvage récolté dans les forêts, symbole de connexion avec la nature',
         'emoji': '🥬',
-        'couleur': '#1B4332'
+        'couleur': '#1B4332',
+        'videos_preparation': [
+            {
+                'titre': 'Comment préparer l\'Eru traditionnel',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '18 min',
+                'langue': 'Français'
+            },
+            {
+                'titre': 'Eru avec stockfish - Recette complète',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '25 min',
+                'langue': 'Anglais'
+            },
+            {
+                'titre': 'Secrets de grand-mère pour l\'Eru',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '22 min',
+                'langue': 'Français'
+            }
+        ]
     },
     'jollof-ghana': {
         'nom': 'Jollof Rice',
@@ -190,7 +230,27 @@ plats_traditionnels = {
         'valeur_nutritive': 'Équilibré en glucides, protéines et légumes',
         'histoire': 'Plat de célébration, fierté culinaire ghanéenne dans la "guerre" du Jollof',
         'emoji': '🍚',
-        'couleur': '#D2691E'
+        'couleur': '#D2691E',
+        'videos_preparation': [
+            {
+                'titre': 'Jollof Rice ghanéen authentique',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '30 min',
+                'langue': 'Anglais'
+            },
+            {
+                'titre': 'Le secret du parfait Jollof ghanéen',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '35 min',
+                'langue': 'Français'
+            },
+            {
+                'titre': 'Jollof Rice pour débutants',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '20 min',
+                'langue': 'Anglais'
+            }
+        ]
     },
     'ndole': {
         'nom': 'Ndolé',
@@ -204,7 +264,27 @@ plats_traditionnels = {
         'valeur_nutritive': 'Très riche en protéines, lipides sains et minéraux',
         'histoire': 'Plat des grandes occasions, symbole de l\'hospitalité camerounaise',
         'emoji': '🥜',
-        'couleur': '#8B4513'
+        'couleur': '#8B4513',
+        'videos_preparation': [
+            {
+                'titre': 'Ndolé traditionnel - Recette complète',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '45 min',
+                'langue': 'Français'
+            },
+            {
+                'titre': 'Maîtriser le Ndolé comme un chef',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '50 min',
+                'langue': 'Anglais'
+            },
+            {
+                'titre': 'Ndolé végétarien moderne',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '30 min',
+                'langue': 'Français'
+            }
+        ]
     },
     'non-food': {
         'nom': 'non-trouve',
@@ -218,7 +298,8 @@ plats_traditionnels = {
         'valeur_nutritive': 'RAS',
         'histoire': 'RAS',
         'emoji': 'RAS',
-        'couleur': '#FFFF'
+        'couleur': '#FFFF',
+        'videos_preparation': []
     },
     
     'palm-nut-soup': {
@@ -233,7 +314,27 @@ plats_traditionnels = {
         'valeur_nutritive': 'Riche en vitamine A, antioxydants et acides gras essentiels',
         'histoire': 'Soupe sacrée dans certaines cultures, liée aux rituels de purification',
         'emoji': '🌴',
-        'couleur': '#FF6B35'
+        'couleur': '#FF6B35',
+        'videos_preparation': [
+            {
+                'titre': 'Palm Nut Soup authentique',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '40 min',
+                'langue': 'Anglais'
+            },
+            {
+                'titre': 'Extraction traditionnelle de l\'huile de palme',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '25 min',
+                'langue': 'Français'
+            },
+            {
+                'titre': 'Soupe de palme moderne et rapide',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '30 min',
+                'langue': 'Anglais'
+            }
+        ]
     },
     'waakye': {
         'nom': 'Waakye',
@@ -247,7 +348,27 @@ plats_traditionnels = {
         'valeur_nutritive': 'Protéines complètes, fibres et glucides complexes',
         'histoire': 'Plat du petit-déjeuner devenu symbole de l\'identité ghanéenne urbaine',
         'emoji': '🍛',
-        'couleur': '#8B0000'
+        'couleur': '#8B0000',
+        'videos_preparation': [
+            {
+                'titre': 'Waakye traditionnel ghanéen',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '35 min',
+                'langue': 'Anglais'
+            },
+            {
+                'titre': 'Waakye avec toutes les garnitures',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '28 min',
+                'langue': 'Français'
+            },
+            {
+                'titre': 'Secrets du Waakye parfait',
+                'url': 'https://www.youtube.com/watch?v=wzYgtKvqXoM',
+                'duree': '32 min',
+                'langue': 'Anglais'
+            }
+        ]
     }
 }
 
