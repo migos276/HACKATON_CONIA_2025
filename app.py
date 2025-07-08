@@ -161,7 +161,8 @@ plats_traditionnels = {
         'difficulte': 'Intermédiaire',
         'valeur_nutritive': 'Riche en fibres, vitamines et protéines',
         'histoire': 'Plat cérémoniel souvent préparé lors des grandes occasions familiales',
-        'emoji': '🌿',
+        'image': 'https://www.akofud.com/wp-content/uploads/2024/08/WhatsApp-Image-2024-08-15-at-9.09.58-PM.jpeg',
+        'emoji_name': 'leaf',
         'couleur': '#2D5016',
         'videos_preparation': [
             {
@@ -195,7 +196,8 @@ plats_traditionnels = {
         'difficulte': 'Facile',
         'valeur_nutritive': 'Très riche en fer, calcium et vitamines',
         'histoire': 'Légume sauvage récolté dans les forêts, symbole de connexion avec la nature',
-        'emoji': '🥬',
+        'image': 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/Le_Eru%2C_un_plat_camerounais.jpg/960px-Le_Eru%2C_un_plat_camerounais.jpg',
+        'emoji_name': 'leafy-greens',
         'couleur': '#1B4332',
         'videos_preparation': [
             {
@@ -229,7 +231,8 @@ plats_traditionnels = {
         'difficulte': 'Facile',
         'valeur_nutritive': 'Équilibré en glucides, protéines et légumes',
         'histoire': 'Plat de célébration, fierté culinaire ghanéenne dans la "guerre" du Jollof',
-        'emoji': '🍚',
+        'image': 'https://eatwellabi.com/wp-content/uploads/2022/11/Jollof-rice-16.jpg',
+        'emoji_name': 'rice',
         'couleur': '#D2691E',
         'videos_preparation': [
             {
@@ -263,7 +266,8 @@ plats_traditionnels = {
         'difficulte': 'Difficile',
         'valeur_nutritive': 'Très riche en protéines, lipides sains et minéraux',
         'histoire': 'Plat des grandes occasions, symbole de l\'hospitalité camerounaise',
-        'emoji': '🥜',
+        'image': 'https://i0.wp.com/afrovitalityeats.com/wp-content/uploads/2018/06/Cameroon-Ndole-dish.jpg?resize=1200%2C1200&ssl=1',
+        'emoji_name': 'peanuts',
         'couleur': '#8B4513',
         'videos_preparation': [
             {
@@ -297,7 +301,8 @@ plats_traditionnels = {
         'difficulte': 'RAS',
         'valeur_nutritive': 'RAS',
         'histoire': 'RAS',
-        'emoji': 'RAS',
+        'image': 'https://images.pexels.com/photos/3184183/pexels-photo-3184183.jpeg?auto=compress&cs=tinysrgb&w=400',
+        'emoji_name': 'unknown',
         'couleur': '#FFFF',
         'videos_preparation': []
     },
@@ -313,7 +318,8 @@ plats_traditionnels = {
         'difficulte': 'Difficile',
         'valeur_nutritive': 'Riche en vitamine A, antioxydants et acides gras essentiels',
         'histoire': 'Soupe sacrée dans certaines cultures, liée aux rituels de purification',
-        'emoji': '🌴',
+        'image': 'https://lowcarbafrica.com/wp-content/uploads/2020/12/Banga-Soup-Palm-Nut-Soup-google.jpg',
+        'emoji_name': 'palm-tree',
         'couleur': '#FF6B35',
         'videos_preparation': [
             {
@@ -347,7 +353,8 @@ plats_traditionnels = {
         'difficulte': 'Facile',
         'valeur_nutritive': 'Protéines complètes, fibres et glucides complexes',
         'histoire': 'Plat du petit-déjeuner devenu symbole de l\'identité ghanéenne urbaine',
-        'emoji': '🍛',
+        'image': 'https://eatwellabi.com/wp-content/uploads/2021/09/Waakye-13.jpg',
+        'emoji_name': 'curry-rice',
         'couleur': '#8B0000',
         'videos_preparation': [
             {

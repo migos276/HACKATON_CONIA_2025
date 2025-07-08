@@ -216,14 +216,40 @@
 
 {% block content %}
 <div class="container">
-    <section class="hero-section">
-        <div class="hero-content">
-            <h1 class="hero-title">📊 Votre Historique Culinaire</h1>
-            <p class="hero-subtitle">
-                Retracez votre parcours de découverte des saveurs africaines
-            </p>
-        </div>
-    </section>
+<section class="hero-section" style="
+    background: linear-gradient(90deg, #fbd786, #f6a85f);
+    padding: 3rem 2rem;
+    border-radius: 16px;
+    text-align: center;
+    color: #333;
+    margin-bottom: 3rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: 'Ubuntu', sans-serif;
+">
+    <div class="hero-content" style="max-width: 800px; margin: 0 auto;">
+        <h1 class="hero-title" style="
+            font-size: 3rem;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            color: #d2691e;
+        ">
+            📊 Votre Historique Culinaire
+        </h1>
+        <p class="hero-subtitle" style="
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #5a3e1b;
+            line-height: 1.5;
+        ">
+            Retracez votre parcours de découverte des saveurs africaines
+        </p>
+    </div>
+</section>
+
 
     {% if predictions %}
     <!-- Résumé statistique -->
@@ -272,7 +298,9 @@
                 <div class="prediction-header">
                     <div>
                         <div class="prediction-dish">
-                            🍽️ {{ prediction.predicted_class|title }}
+                            <img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=40" 
+                                 alt="dish" style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover; margin-right: 8px; vertical-align: middle;">
+                            {{ prediction.predicted_class|title }}
                         </div>
                         <div class="prediction-date">
                             <i class="fas fa-calendar"></i>

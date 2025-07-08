@@ -3,12 +3,46 @@
 {% block content %}
 <div class="container">
     <section class="hero-section">
-        <div class="hero-content">
-            <h1 class="hero-title">🍽️ Découvrez l'Afrique à travers ses Saveurs</h1>
-            <p class="hero-subtitle">
-                Utilisez l'intelligence artificielle pour identifier et explorer la richesse culinaire africaine. 
-                De l'Ekwang camerounais au Jollof ghanéen, plongez dans un voyage gastronomique authentique.
-            </p>
+        <div style="
+    background: linear-gradient(135deg, #ff6b35 0%, #3cb371 100%);
+    padding: 4rem 1rem;
+    text-align: center;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    color: white;
+    margin-bottom: 3rem;
+">
+    <h1 
+        style="
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        "
+    >
+        🍽️ Découvrez l'Afrique à travers ses Saveurs
+    </h1>
+
+    <p 
+        style="
+            font-family: 'Open Sans', sans-serif;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #fff;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 1.2rem 1.5rem;
+            background: rgba(0,0,0,0.2);
+            border-left: 5px solid #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        "
+    >
+        Utilisez l'intelligence artificielle pour identifier et explorer la richesse culinaire africaine. 
+        De l'Ekwang camerounais au Jollof ghanéen, plongez dans un voyage gastronomique authentique.
+    </p>
             {% if session.user_email %}
                 <a href="{{ url_for('dashboard') }}" class="btn btn-primary pulse">
                     <i class="fas fa-camera"></i> Commencer l'Analyse
@@ -20,51 +54,91 @@
             {% endif %}
         </div>
     </section>
+<section style="
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.05), rgba(60, 179, 113, 0.05));
+    padding: 4rem 2rem;
+    border-radius: 20px;
+    backdrop-filter: blur(2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    margin-bottom: 3rem;
+">
 
-    <section>
-        <h2 class="section-title">🌍 Pourquoi AfriFood AI ?</h2>
-        <div class="grid grid-3">
-            <div class="card">
-                <div style="text-align: center; margin-bottom: 1.5rem;">
-                    <i class="fas fa-brain" style="font-size: 3rem; color: var(--primary-color);"></i>
-                </div>
-                <h3 style="color: var(--secondary-color); margin-bottom: 1rem; text-align: center;">IA Avancée</h3>
-                <p style="text-align: center;">
-                    Notre modèle d'intelligence artificielle reconnaît avec précision les plats traditionnels africains 
-                    et vous fournit des informations détaillées sur leur origine et leur préparation.
-                </p>
+      <div style="text-align: center;">
+  <h2 class="section-title" style="
+      color: #fff;
+      font-size: 2.5rem;
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 3rem;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.15);
+      background: linear-gradient(90deg, #fbc02d, #81c784);
+      padding: 1rem 2rem;
+      border-radius: 20px;
+      display: inline-block;
+  ">
+       🌍 Pourquoi AfriFood AI ?
+  </h2>
+</div>
+
+
+    <div class="grid grid-3">
+        <div class="card" style="background-color: rgba(255,255,255,0.9); border-radius: 15px; padding: 2rem;">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <i class="fas fa-brain" style="font-size: 3rem; color: #ff6b35;"></i>
             </div>
-            
-            <div class="card">
-                <div style="text-align: center; margin-bottom: 1.5rem;">
-                    <i class="fas fa-globe-africa" style="font-size: 3rem; color: var(--accent-color);"></i>
-                </div>
-                <h3 style="color: var(--secondary-color); margin-bottom: 1rem; text-align: center;">Héritage Culturel</h3>
-                <p style="text-align: center;">
-                    Préservez et transmettez la richesse culinaire africaine. Chaque plat raconte une histoire, 
-                    une tradition, un savoir-faire ancestral que nous célébrons.
-                </p>
-            </div>
-            
-            <div class="card">
-                <div style="text-align: center; margin-bottom: 1.5rem;">
-                    <i class="fas fa-users" style="font-size: 3rem; color: var(--forest-green);"></i>
-                </div>
-                <h3 style="color: var(--secondary-color); margin-bottom: 1rem; text-align: center;">Communauté</h3>
-                <p style="text-align: center;">
-                    Rejoignez une communauté passionnée qui partage l'amour de la cuisine africaine. 
-                    Découvrez, apprenez et partagez vos expériences culinaires.
-                </p>
-            </div>
+            <h3 style="color: #3cb371; margin-bottom: 1rem; text-align: center;">IA Avancée</h3>
+            <p style="text-align: center;">
+                Notre modèle d'intelligence artificielle reconnaît avec précision les plats traditionnels africains 
+                et vous fournit des informations détaillées sur leur origine et leur préparation.
+            </p>
         </div>
-    </section>
+
+        <div class="card" style="background-color: rgba(255,255,255,0.9); border-radius: 15px; padding: 2rem;">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <i class="fas fa-globe-africa" style="font-size: 3rem; color: #ffa94d;"></i>
+            </div>
+            <h3 style="color: #3cb371; margin-bottom: 1rem; text-align: center;">Héritage Culturel</h3>
+            <p style="text-align: center;">
+                Préservez et transmettez la richesse culinaire africaine. Chaque plat raconte une histoire, 
+                une tradition, un savoir-faire ancestral que nous célébrons.
+            </p>
+        </div>
+
+        <div class="card" style="background-color: rgba(255,255,255,0.9); border-radius: 15px; padding: 2rem;">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <i class="fas fa-users" style="font-size: 3rem; color: #3cb371;"></i>
+            </div>
+            <h3 style="color: #3cb371; margin-bottom: 1rem; text-align: center;">Communauté</h3>
+            <p style="text-align: center;">
+                Rejoignez une communauté passionnée qui partage l'amour de la cuisine africaine. 
+                Découvrez, apprenez et partagez vos expériences culinaires.
+            </p>
+        </div>
+    </div>
+</section>
 
     <section>
-        <h2 class="section-title">🍲 Plats Reconnus par notre IA</h2>
+      <div style="text-align: center;">
+  <h2 class="section-title" style="
+      color: #fff;
+      font-size: 2.5rem;
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 3rem;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.15);
+      background: linear-gradient(90deg, #fbc02d, #81c784);
+      padding: 1rem 2rem;
+      border-radius: 20px;
+      display: inline-block;
+  ">
+      🍲 Plats Reconnus par notre IA
+  </h2>
+</div>
+
         <div class="grid grid-2">
             <div class="card">
                 <h3 style="color: var(--primary-color); margin-bottom: 1rem;">
-                    <span style="font-size: 2rem;">🌿</span> Plats Camerounais
+                    <img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=60" 
+                         alt="leaf" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px; vertical-align: middle;">
+                    Plats Camerounais
                 </h3>
                 <ul style="list-style: none; padding: 0;">
                     <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
@@ -81,7 +155,9 @@
             
             <div class="card">
                 <h3 style="color: var(--accent-color); margin-bottom: 1rem;">
-                    <span style="font-size: 2rem;">🍚</span> Spécialités Ghanéennes
+                    <img src="https://images.pexels.com/photos/2474661/pexels-photo-2474661.jpeg?auto=compress&cs=tinysrgb&w=60" 
+                         alt="rice" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px; vertical-align: middle;">
+                    Spécialités Ghanéennes
                 </h3>
                 <ul style="list-style: none; padding: 0;">
                     <li style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
@@ -99,7 +175,24 @@
     </section>
 
     <section>
-        <h2 class="section-title">🚀 Comment ça marche ?</h2>
+
+      <div style="text-align: center;">
+  <h2 class="section-title" style="
+      color: #fff;
+      font-size: 2.5rem;
+      font-family: 'Playfair Display', serif;
+      margin-bottom: 3rem;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.15);
+      background: linear-gradient(90deg, #fbc02d, #81c784);
+      padding: 1rem 2rem;
+      border-radius: 20px;
+      display: inline-block;
+  ">
+      🚀 Comment ça marche ?
+  </h2>
+</div>
+
+
         <div class="grid grid-4">
             <div class="card" style="text-align: center;">
                 <div style="background: var(--primary-color); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem; font-weight: bold;">1</div>

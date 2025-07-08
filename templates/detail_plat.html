@@ -4,9 +4,30 @@
 
 {% block extra_css %}
 <style>
+    /* ===== VARIABLES CSS ===== */
+    :root {
+        --plat-color: {{ plat.couleur }};
+        --plat-color-alpha: {{ plat.couleur }}dd;
+        --white: #ffffff;
+        --dark-overlay: rgba(0,0,0,0.3);
+        --light-overlay: rgba(255,255,255,0.1);
+        --border-radius-sm: 10px;
+        --border-radius-md: 15px;
+        --border-radius-lg: 20px;
+        --border-radius-xl: 25px;
+        --border-radius-round: 50%;
+        --shadow-sm: 0 5px 15px rgba(0,0,0,0.05);
+        --shadow-md: 0 8px 25px rgba(0,0,0,0.1);
+        --shadow-lg: 0 10px 40px rgba(0,0,0,0.1);
+        --shadow-xl: 0 15px 50px rgba(0,0,0,0.15);
+        --transition-fast: 0.3s ease;
+        --transition-slow: 0.8s ease;
+    }
+
+    /* ===== HERO SECTION ===== */
     .plat-hero {
-        background: linear-gradient(135deg, {{ plat.couleur }}, {{ plat.couleur }}dd);
-        color: white;
+        background: linear-gradient(135deg, var(--plat-color), var(--plat-color-alpha));
+        color: var(--white);
         padding: 4rem 0;
         text-align: center;
         position: relative;
@@ -25,10 +46,15 @@
             45deg,
             transparent,
             transparent 15px,
-            rgba(255,255,255,0.1) 15px,
-            rgba(255,255,255,0.1) 30px
+            var(--light-overlay) 15px,
+            var(--light-overlay) 30px
         );
         animation: rotate 30s linear infinite;
+    }
+
+    @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 
     .plat-hero-content {
@@ -40,7 +66,7 @@
         font-size: 6rem;
         margin-bottom: 1rem;
         display: block;
-        text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        text-shadow: 0 4px 8px var(--dark-overlay);
     }
 
     .plat-title {
@@ -48,7 +74,7 @@
         font-size: 3.5rem;
         font-weight: 700;
         margin-bottom: 1rem;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        text-shadow: 2px 2px 4px var(--dark-overlay);
     }
 
     .plat-subtitle {
@@ -57,10 +83,21 @@
         margin-bottom: 2rem;
     }
 
+    .plat-image {
+        width: 150px;
+        height: 150px;
+        border-radius: var(--border-radius-round);
+        object-fit: cover;
+        margin-bottom: 1rem;
+        border: 6px solid var(--light-overlay);
+        box-shadow: 0 12px 35px var(--dark-overlay);
+    }
+
+    /* ===== BREADCRUMB ===== */
     .breadcrumb {
-        background: rgba(255,255,255,0.1);
+        background: var(--light-overlay);
         padding: 1rem 2rem;
-        border-radius: 25px;
+        border-radius: var(--border-radius-xl);
         display: inline-flex;
         align-items: center;
         gap: 0.5rem;
@@ -68,14 +105,23 @@
     }
 
     .breadcrumb a {
-        color: white;
+        color: var(--white);
         text-decoration: none;
         opacity: 0.8;
-        transition: opacity 0.3s ease;
+        transition: opacity var(--transition-fast);
     }
 
     .breadcrumb a:hover {
         opacity: 1;
+    }
+
+    /* ===== CARDS & GRIDS ===== */
+    .card {
+        background: var(--white);
+        border-radius: var(--border-radius-lg);
+        padding: 2rem;
+        box-shadow: var(--shadow-lg);
+        margin-bottom: 2rem;
     }
 
     .info-grid {
@@ -86,21 +132,21 @@
     }
 
     .info-card {
-        background: white;
-        border-radius: 20px;
+        background: var(--white);
+        border-radius: var(--border-radius-lg);
         padding: 2rem;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-        border-left: 5px solid {{ plat.couleur }};
-        transition: all 0.3s ease;
+        box-shadow: var(--shadow-lg);
+        border-left: 5px solid var(--plat-color);
+        transition: all var(--transition-fast);
     }
 
     .info-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+        box-shadow: var(--shadow-xl);
     }
 
     .info-card h3 {
-        color: {{ plat.couleur }};
+        color: var(--plat-color);
         margin-bottom: 1.5rem;
         display: flex;
         align-items: center;
@@ -108,6 +154,18 @@
         font-family: 'Playfair Display', serif;
     }
 
+    .info-card-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .info-card-row:last-child {
+        border-bottom: none;
+    }
+
+    /* ===== INGREDIENTS ===== */
     .ingredients-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
@@ -116,72 +174,73 @@
     }
 
     .ingredient-item {
-        background: linear-gradient(45deg, {{ plat.couleur }}, {{ plat.couleur }}dd);
-        color: white;
+        background: linear-gradient(45deg, var(--plat-color), var(--plat-color-alpha));
+        color: var(--white);
         padding: 0.8rem 1rem;
-        border-radius: 15px;
+        border-radius: var(--border-radius-md);
         text-align: center;
         font-weight: 500;
-        transition: all 0.3s ease;
+        transition: all var(--transition-fast);
         cursor: pointer;
     }
 
     .ingredient-item:hover {
         transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        box-shadow: var(--shadow-md);
+    }
+
+    /* ===== NUTRITION BARS ===== */
+    .nutrition-section {
+        margin-top: 1.5rem;
+    }
+
+    .nutrition-item {
+        margin-bottom: 1rem;
+    }
+
+    .nutrition-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.3rem;
     }
 
     .nutrition-bar {
         background: #f0f0f0;
-        border-radius: 10px;
+        border-radius: var(--border-radius-sm);
         height: 8px;
-        margin: 0.5rem 0;
         overflow: hidden;
     }
 
     .nutrition-fill {
-        background: linear-gradient(90deg, {{ plat.couleur }}, var(--accent-color));
+        background: linear-gradient(90deg, var(--plat-color), var(--accent-color));
         height: 100%;
-        border-radius: 10px;
-        transition: width 0.8s ease;
+        border-radius: var(--border-radius-sm);
+        transition: width var(--transition-slow);
     }
 
-    .recipe-steps {
-        background: linear-gradient(135deg, rgba(210, 105, 30, 0.05), rgba(255, 107, 53, 0.05));
-        border-radius: 20px;
-        padding: 2rem;
-        margin: 2rem 0;
+    /* ===== ADVICE LIST ===== */
+    .advice-list {
+        list-style: none;
+        padding: 0;
     }
 
-    .step-item {
-        display: flex;
-        align-items: flex-start;
-        gap: 1rem;
-        margin-bottom: 1.5rem;
-        padding: 1rem;
-        background: white;
-        border-radius: 15px;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    }
-
-    .step-number {
-        background: {{ plat.couleur }};
-        color: white;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
+    .advice-item {
+        padding: 0.5rem 0;
         display: flex;
         align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        flex-shrink: 0;
+        gap: 0.5rem;
     }
 
+    .advice-icon {
+        color: var(--success-color);
+    }
+
+    /* ===== CULTURAL SECTION ===== */
     .cultural-section {
         background: linear-gradient(135deg, var(--dark-color), var(--charcoal));
-        color: white;
+        color: var(--white);
         padding: 3rem;
-        border-radius: 20px;
+        border-radius: var(--border-radius-lg);
         margin: 3rem 0;
         position: relative;
         overflow: hidden;
@@ -203,49 +262,89 @@
         z-index: 2;
     }
 
-    .action-buttons {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        margin: 3rem 0;
-        flex-wrap: wrap;
+    .cultural-title {
+        color: var(--gold-yellow);
+        margin-bottom: 2rem;
+        text-align: center;
+        font-family: 'Playfair Display', serif;
     }
 
-    .share-buttons {
-        display: flex;
-        gap: 0.5rem;
-        justify-content: center;
+    .cultural-text {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    /* ===== RECIPE STEPS ===== */
+    .recipe-steps {
+        background: linear-gradient(135deg, rgba(210, 105, 30, 0.05), rgba(255, 107, 53, 0.05));
+        border-radius: var(--border-radius-lg);
+        padding: 2rem;
         margin: 2rem 0;
     }
 
-    .share-btn {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
+    .recipe-title {
+        color: var(--primary-color);
+        margin-bottom: 2rem;
+        text-align: center;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .step-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background: var(--white);
+        border-radius: var(--border-radius-md);
+        box-shadow: var(--shadow-sm);
+    }
+
+    a{
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .step-number {
+        background: var(--plat-color);
+        color: var(--white);
+        width: 40px;
+        height: 40px;
+        border-radius: var(--border-radius-round);
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
-        text-decoration: none;
-        transition: all 0.3s ease;
+        font-weight: bold;
+        flex-shrink: 0;
     }
 
-    .share-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    .step-title {
+        color: var(--secondary-color);
+        margin-bottom: 0.5rem;
     }
 
-    .facebook { background: #3b5998; }
-    .twitter { background: #1da1f2; }
-    .whatsapp { background: #25d366; }
-    .pinterest { background: #bd081c; }
-
-    /* Styles pour la section vidéos */
+    /* ===== VIDEOS SECTION ===== */
     .videos-section {
         background: linear-gradient(135deg, rgba(255, 107, 53, 0.05), rgba(210, 105, 30, 0.05));
-        border-radius: 20px;
+        border-radius: var(--border-radius-lg);
         padding: 2rem;
         margin: 3rem 0;
+    }
+
+    .videos-title {
+        color: var(--plat-color);
+        margin-bottom: 1rem;
+        text-align: center;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .videos-subtitle {
+        text-align: center;
+        color: var(--charcoal);
+        margin-bottom: 2rem;
     }
 
     .video-grid {
@@ -256,35 +355,35 @@
     }
 
     .video-card {
-        background: white;
-        border-radius: 15px;
+        background: var(--white);
+        border-radius: var(--border-radius-md);
         overflow: hidden;
-        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
+        box-shadow: var(--shadow-md);
+        transition: all var(--transition-fast);
         border: 2px solid transparent;
     }
 
     .video-card:hover {
         transform: translateY(-5px);
-        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-        border-color: {{ plat.couleur }};
+        box-shadow: var(--shadow-xl);
+        border-color: var(--plat-color);
     }
 
     .video-thumbnail {
         position: relative;
-        background: linear-gradient(135deg, {{ plat.couleur }}, {{ plat.couleur }}dd);
+        background: linear-gradient(135deg, var(--plat-color), var(--plat-color-alpha));
         height: 180px;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
+        color: var(--white);
         font-size: 3rem;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all var(--transition-fast);
     }
 
     .video-thumbnail:hover {
-        background: linear-gradient(135deg, {{ plat.couleur }}dd, {{ plat.couleur }});
+        background: linear-gradient(135deg, var(--plat-color-alpha), var(--plat-color));
     }
 
     .video-thumbnail::before {
@@ -298,16 +397,23 @@
             45deg,
             transparent,
             transparent 10px,
-            rgba(255,255,255,0.1) 10px,
-            rgba(255,255,255,0.1) 20px
+            var(--light-overlay) 10px,
+            var(--light-overlay) 20px
         );
+    }
+
+    .video-thumbnail-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: var(--border-radius-md);
     }
 
     .play-icon {
         position: relative;
         z-index: 2;
         background: rgba(255,255,255,0.2);
-        border-radius: 50%;
+        border-radius: var(--border-radius-round);
         width: 80px;
         height: 80px;
         display: flex;
@@ -337,21 +443,96 @@
     }
 
     .video-duration {
-        background: {{ plat.couleur }};
-        color: white;
+        background: var(--plat-color);
+        color: var(--white);
         padding: 0.3rem 0.8rem;
-        border-radius: 15px;
+        border-radius: var(--border-radius-md);
         font-weight: 600;
     }
 
     .video-language {
         background: rgba(210, 105, 30, 0.1);
-        color: {{ plat.couleur }};
+        color: var(--plat-color);
         padding: 0.3rem 0.8rem;
-        border-radius: 15px;
+        border-radius: var(--border-radius-md);
         font-weight: 600;
     }
 
+    /* ===== BUTTONS ===== */
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin: 3rem 0;
+        flex-wrap: wrap;
+    }
+
+    .share-section {
+        text-align: center;
+        margin: 3rem 0;
+    }
+
+    .share-title {
+        color: var(--secondary-color);
+        margin-bottom: 1rem;
+    }
+
+    .share-buttons {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+
+    .share-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: var(--border-radius-round);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--white);
+        text-decoration: none;
+        transition: all var(--transition-fast);
+    }
+
+    .share-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .share-btn.facebook { background: #3b5998; }
+    .share-btn.twitter { background: #1da1f2; }
+    .share-btn.whatsapp { background: #25d366; }
+    .share-btn.pinterest { background: #bd081c; }
+
+    /* ===== UTILITY CLASSES ===== */
+    .section-title {
+        margin-bottom: 1.5rem;
+        font-family: 'Playfair Display', serif;
+    }
+
+    .section-subtitle {
+        font-size: 1.1rem;
+        line-height: 1.8;
+        color: var(--charcoal);
+    }
+
+    .difficulty-easy { color: var(--success-color); }
+    .difficulty-medium { color: var(--warning-color); }
+    .difficulty-hard { color: var(--error-color); }
+
+    .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: all 0.6s ease;
+    }
+
+    .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE DESIGN ===== */
     @media (max-width: 768px) {
         .plat-title {
             font-size: 2.5rem;
@@ -373,14 +554,28 @@
         .video-grid {
             grid-template-columns: 1fr;
         }
+
+        .cultural-section {
+            padding: 2rem;
+        }
+
+        .recipe-steps {
+            padding: 1rem;
+        }
+
+        .videos-section {
+            padding: 1rem;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
+<!-- ===== HERO SECTION ===== -->
 <div class="plat-hero">
     <div class="container">
         <div class="plat-hero-content">
+            <!-- Breadcrumb -->
             <div class="breadcrumb">
                 <a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Accueil</a>
                 <i class="fas fa-chevron-right"></i>
@@ -389,42 +584,70 @@
                 <span>{{ plat.nom }}</span>
             </div>
             
-            <span class="plat-emoji">{{ plat.emoji }}</span>
+            <!-- Image or Emoji -->
+            {% if plat.image %}
+            <img src="{{ plat.image }}" alt="{{ plat.emoji_name or 'plat' }}" class="plat-image">
+            {% else %}
+            <span class="plat-emoji">🍽️</span>
+            {% endif %}
+            
+            <!-- Title and Subtitle -->
             <h1 class="plat-title">{{ plat.nom }}</h1>
             <p class="plat-subtitle">{{ plat.nom_local }}</p>
         </div>
     </div>
 </div>
 
+<!-- ===== MAIN CONTENT ===== -->
 <div class="container">
     <!-- Description principale -->
-    <div class="card" style="margin-bottom: 3rem;">
-        <h2 style="color: {{ plat.couleur }}; margin-bottom: 1.5rem; font-family: 'Playfair Display', serif;">
+    <div class="card">
+        <h2 class="section-title" style="color: {{ plat.couleur }};">
             <i class="fas fa-book-open"></i> À Propos de ce Plat
         </h2>
-        <p style="font-size: 1.1rem; line-height: 1.8; color: var(--charcoal);">
-            {{ plat.description }}
-        </p>
+        <p class="section-subtitle">{{ plat.description }}</p>
     </div>
 
     <!-- Section Vidéos de Préparation -->
     {% if plat.videos_preparation %}
     <div class="videos-section">
-        <h2 style="color: {{ plat.couleur }}; margin-bottom: 1rem; text-align: center; font-family: 'Playfair Display', serif;">
-            <i class="fas fa-video"></i> Apprenez à Préparer {{ plat.nom }}
-        </h2>
-        <p style="text-align: center; color: var(--charcoal); margin-bottom: 2rem;">
-            Découvrez les secrets de préparation grâce à ces vidéos détaillées
-        </p>
-        
+<h2 class="videos-title" style="
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: #d2691e;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    background-color: white;
+    border-radius: 20px;
+    padding:10px;
+">
+    <i class="fas fa-video" style="color: #ff6b35;"></i> Apprenez à Préparer {{ plat.nom }}
+</h2>
+<p class="videos-subtitle" style="
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 1.2rem;
+    color: #5a3e1b;
+    margin-bottom: 2rem;
+    max-width: 700px;
+">
+    Découvrez les secrets de préparation grâce à ces vidéos détaillées
+</p>
+
         <div class="video-grid">
             {% for video in plat.videos_preparation %}
             <div class="video-card">
-                <div class="video-thumbnail" onclick="openVideo('{{ video.url }}')">
+                <a href="{{ video.url }}" target="_blank" class="video-thumbnail" onclick="openVideo(event, '{{ video.url }}')">
+                    {% if video.thumbnail %}
+                    <img src="{{ video.thumbnail }}" alt="{{ video.titre }}" class="video-thumbnail-image">
+                    {% else %}
+                    <i class="fas fa-video"></i>
+                    {% endif %}
                     <div class="play-icon">
                         <i class="fas fa-play"></i>
                     </div>
-                </div>
+                </a>
                 <div class="video-info">
                     <h4 class="video-title">{{ video.titre }}</h4>
                     <div class="video-meta">
@@ -448,21 +671,21 @@
         <div class="info-card">
             <h3><i class="fas fa-info-circle"></i> Informations Générales</h3>
             <div style="display: grid; gap: 1rem;">
-                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                <div class="info-card-row">
                     <strong>Origine:</strong>
                     <span>{{ plat.origine }}</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                <div class="info-card-row">
                     <strong>Région:</strong>
                     <span>{{ plat.region or 'Non spécifiée' }}</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                <div class="info-card-row">
                     <strong>Temps de préparation:</strong>
                     <span>{{ plat.temps_preparation }}</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0;">
+                <div class="info-card-row">
                     <strong>Difficulté:</strong>
-                    <span style="color: {% if plat.difficulte == 'Facile' %}var(--success-color){% elif plat.difficulte == 'Difficile' %}var(--error-color){% else %}var(--warning-color){% endif %};">
+                    <span class="difficulty-{{ plat.difficulte.lower() }}">
                         {{ plat.difficulte }}
                     </span>
                 </div>
@@ -488,10 +711,10 @@
             <h3><i class="fas fa-heart"></i> Valeur Nutritive</h3>
             <p style="margin-bottom: 1rem;">{{ plat.valeur_nutritive }}</p>
             
-            <!-- Barres nutritionnelles simulées -->
-            <div style="margin-top: 1.5rem;">
-                <div style="margin-bottom: 1rem;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+            <!-- Barres nutritionnelles -->
+            <div class="nutrition-section">
+                <div class="nutrition-item">
+                    <div class="nutrition-header">
                         <span>Protéines</span>
                         <span>85%</span>
                     </div>
@@ -500,8 +723,8 @@
                     </div>
                 </div>
                 
-                <div style="margin-bottom: 1rem;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+                <div class="nutrition-item">
+                    <div class="nutrition-header">
                         <span>Vitamines</span>
                         <span>92%</span>
                     </div>
@@ -510,8 +733,8 @@
                     </div>
                 </div>
                 
-                <div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.3rem;">
+                <div class="nutrition-item">
+                    <div class="nutrition-header">
                         <span>Minéraux</span>
                         <span>78%</span>
                     </div>
@@ -525,21 +748,21 @@
         <!-- Conseils de préparation -->
         <div class="info-card">
             <h3><i class="fas fa-utensils"></i> Conseils de Préparation</h3>
-            <ul style="list-style: none; padding: 0;">
-                <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+            <ul class="advice-list">
+                <li class="advice-item">
+                    <i class="fas fa-check-circle advice-icon"></i>
                     Utilisez des ingrédients frais et locaux
                 </li>
-                <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+                <li class="advice-item">
+                    <i class="fas fa-check-circle advice-icon"></i>
                     Respectez les temps de cuisson traditionnels
                 </li>
-                <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+                <li class="advice-item">
+                    <i class="fas fa-check-circle advice-icon"></i>
                     Préparez avec amour et patience
                 </li>
-                <li style="padding: 0.5rem 0; display: flex; align-items: center; gap: 0.5rem;">
-                    <i class="fas fa-check-circle" style="color: var(--success-color);"></i>
+                <li class="advice-item">
+                    <i class="fas fa-check-circle advice-icon"></i>
                     Partagez en famille ou entre amis
                 </li>
             </ul>
@@ -550,26 +773,24 @@
     {% if plat.histoire %}
     <div class="cultural-section">
         <div class="cultural-content">
-            <h2 style="color: var(--gold-yellow); margin-bottom: 2rem; text-align: center; font-family: 'Playfair Display', serif;">
+            <h2 class="cultural-title">
                 <i class="fas fa-scroll"></i> Histoire & Tradition
             </h2>
-            <p style="font-size: 1.1rem; line-height: 1.8; text-align: center; max-width: 800px; margin: 0 auto;">
-                {{ plat.histoire }}
-            </p>
+            <p class="cultural-text">{{ plat.histoire }}</p>
         </div>
     </div>
     {% endif %}
 
-    <!-- Étapes de préparation simulées -->
+    <!-- Étapes de préparation -->
     <div class="recipe-steps">
-        <h2 style="color: var(--primary-color); margin-bottom: 2rem; text-align: center; font-family: 'Playfair Display', serif;">
+        <h2 class="recipe-title">
             <i class="fas fa-list-ol"></i> Étapes de Préparation Traditionnelle
         </h2>
         
         <div class="step-item">
             <div class="step-number">1</div>
             <div>
-                <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">Préparation des ingrédients</h4>
+                <h4 class="step-title">Préparation des ingrédients</h4>
                 <p>Rassemblez et préparez tous les ingrédients selon les méthodes traditionnelles. Nettoyez soigneusement les légumes et épices.</p>
             </div>
         </div>
@@ -577,7 +798,7 @@
         <div class="step-item">
             <div class="step-number">2</div>
             <div>
-                <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">Cuisson de base</h4>
+                <h4 class="step-title">Cuisson de base</h4>
                 <p>Commencez par la cuisson des éléments principaux en respectant l'ordre traditionnel et les temps de cuisson ancestraux.</p>
             </div>
         </div>
@@ -585,7 +806,7 @@
         <div class="step-item">
             <div class="step-number">3</div>
             <div>
-                <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">Assemblage et assaisonnement</h4>
+                <h4 class="step-title">Assemblage et assaisonnement</h4>
                 <p>Assemblez les différents composants et ajoutez les épices selon les proportions traditionnelles transmises de génération en génération.</p>
             </div>
         </div>
@@ -593,7 +814,7 @@
         <div class="step-item">
             <div class="step-number">4</div>
             <div>
-                <h4 style="color: var(--secondary-color); margin-bottom: 0.5rem;">Finition et service</h4>
+                <h4 class="step-title">Finition et service</h4>
                 <p>Laissez mijoter pour que les saveurs se mélangent parfaitement, puis servez chaud selon la tradition locale.</p>
             </div>
         </div>
@@ -619,8 +840,8 @@
     </div>
 
     <!-- Boutons de partage -->
-    <div style="text-align: center; margin: 3rem 0;">
-        <h3 style="color: var(--secondary-color); margin-bottom: 1rem;">Partagez cette Découverte</h3>
+    <div class="share-section">
+        <h3 class="share-title">Partagez cette Découverte</h3>
         <div class="share-buttons">
             <a href="#" class="share-btn facebook" title="Partager sur Facebook">
                 <i class="fab fa-facebook-f"></i>
@@ -641,6 +862,35 @@
 
 {% block extra_js %}
 <script>
+    // ===== CONFIGURATION & VARIABLES =====
+    const animationConfig = {
+        nutritionDelay: 200,
+        observerThreshold: 0.1,
+        observerRootMargin: '0px 0px -50px 0px',
+        clickAnimationDuration: 150,
+        favoriteButtonDelay: 2000
+    };
+
+    // ===== UTILITY FUNCTIONS =====
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    function animateElement(element, animation, duration = 300) {
+        return new Promise(resolve => {
+            element.style.transition = `all ${duration}ms ease`;
+            Object.assign(element.style, animation);
+            setTimeout(resolve, duration);
+        });
+    }
     // Animation des barres nutritionnelles
     window.addEventListener('load', () => {
         const nutritionBars = document.querySelectorAll('.nutrition-fill');
@@ -651,17 +901,19 @@
         });
     });
 
-    // Fonction pour ouvrir une vidéo
-    function openVideo(url) {
-        // Ouvrir la vidéo dans un nouvel onglet
-        window.open(url, '_blank');
-        
-        // Optionnel: Ajouter une animation de clic
-        event.target.closest('.video-thumbnail').style.transform = 'scale(0.95)';
+    function openVideo(event, url) {
+    // Ouvrir la vidéo dans un nouvel onglet
+    window.open(url, '_blank');
+
+    // Animation de clic
+    const thumbnail = event.target.closest('.video-thumbnail');
+    if (thumbnail) {
+        thumbnail.style.transform = 'scale(0.95)';
         setTimeout(() => {
-            event.target.closest('.video-thumbnail').style.transform = 'scale(1)';
+            thumbnail.style.transform = 'scale(1)';
         }, 150);
     }
+}
 
     // Fonction pour ajouter aux favoris
     function addToFavorites(platName) {

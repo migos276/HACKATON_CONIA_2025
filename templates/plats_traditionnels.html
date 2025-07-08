@@ -214,6 +214,21 @@
         justify-content: center;
         font-size: 0.7rem;
     }
+    .hero-title{
+         background-color: #E0E0E0;
+         border-radius: 50px;
+    }
+    .hero-subtitle {
+    font-size: 1.5rem;               /* Taille moyenne/large */
+    font-weight: 300;                /* Texte léger */
+    color: #fffaf0;                  /* Couleur crème claire */
+    text-align: center;             /* Centré */
+    line-height: 1.6;               /* Hauteur de ligne confortable */
+    max-width: 800px;               /* Largeur contrôlée */
+    margin: 20px auto;              /* Centré avec espace autour */
+    font-style: italic;             /* Style légèrement poétique */
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5); /* Légère ombre pour la lisibilité */
+}
 
     @media (max-width: 768px) {
         .filter-buttons {
@@ -238,10 +253,21 @@
     <section class="hero-section">
         <div class="hero-content">
             <h1 class="hero-title">📚 Encyclopédie des Plats Africains</h1>
-            <p class="hero-subtitle">
-                Explorez la richesse culinaire de l'Afrique. Chaque plat raconte une histoire, 
-                porte une tradition et révèle l'âme d'un peuple.
-            </p>
+<p class="hero-subtitle" style="
+    background: linear-gradient(90deg, #fbd786, #c6ffdd);
+    color: #333;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+">
+    Explorez la richesse culinaire de l'Afrique. Chaque plat raconte une histoire, 
+    porte une tradition et révèle l'âme d'un peuple.
+</p>
+
         </div>
     </section>
 
@@ -281,7 +307,12 @@
             {% endif %}
             
             <div class="plat-header" style="background: linear-gradient(135deg, {{ plat.couleur }}, {{ plat.couleur }}dd);">
-                <span class="plat-emoji">{{ plat.emoji }}</span>
+                {% if plat.image %}
+                <img src="{{ plat.image }}" alt="{{ plat.emoji_name or 'plat' }}" class="plat-image" 
+                     style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem; border: 4px solid rgba(255,255,255,0.3); box-shadow: 0 8px 25px rgba(0,0,0,0.2);">
+                {% else %}
+                <span class="plat-emoji">🍽️</span>
+                {% endif %}
                 <h2 class="plat-name">{{ plat.nom }}</h2>
                 <p class="plat-origin">
                     <i class="fas fa-map-marker-alt"></i> {{ plat.origine }}
@@ -360,7 +391,7 @@
 
     <!-- Section statistiques -->
     <section style="margin-top: 4rem;">
-        <h2 class="section-title">📊 Statistiques de notre Collection</h2>
+        <h2 class="section-title" style="background-color: #E0E0E0;">📊 Statistiques de notre Collection</h2>
         <div class="grid grid-4">
             <div class="card" style="text-align: center; background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); color: white;">
                 <h3 style="font-size: 2.5rem; margin-bottom: 0.5rem;">{{ plats|length }}</h3>

@@ -3,6 +3,7 @@
 {% block title %}Tableau de bord - AfriFood AI{% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
     .upload-area {
         border: 3px dashed var(--primary-color);
@@ -165,14 +166,40 @@
 
 {% block content %}
 <div class="container">
-    <section class="hero-section">
-        <div class="hero-content">
-            <h1 class="hero-title">🎯 Tableau de Bord</h1>
-            <p class="hero-subtitle">
-                Bienvenue {{ session.user_email }}! Analysez vos plats africains préférés avec notre IA avancée.
-            </p>
-        </div>
-    </section>
+<section class="hero-section" style="
+    background: linear-gradient(90deg, #fbd786, #c6ffdd);
+    padding: 3rem 2rem;
+    border-radius: 16px;
+    text-align: center;
+    color: #333;
+    margin-bottom: 3rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+">
+    <div class="hero-content">
+        <h1 class="hero-title" style="
+            font-size: 3rem;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+        ">
+            <i class="fas fa-chart-line" style="color: #2e7d32;"></i>
+            Tableau de Bord
+        </h1>
+        <p class="hero-subtitle" style="
+            font-size: 1.3rem;
+            font-family: 'Ubuntu', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+        ">
+            Bienvenue {{ session.user_email.split('@')[0] }} ! Analysez vos plats africains préférés avec notre IA avancée.
+        </p>
+    </div>
+</section>
+
+
 
     <!-- Statistiques utilisateur -->
     <div class="stats-grid" id="userStats">
@@ -441,8 +468,21 @@
         const platInfo = result.plat_info;
         
         // Mise à jour du plat identifié
+        const platImage = platInfo.image ? 
+            `<img src="${platInfo.image}" 
+     alt="${platInfo.emoji_name || 'plat'}" 
+     style="
+        width: 250px; 
+        height: 250px; 
+        object-fit: cover; 
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        display: block;
+        margin: 20px auto;
+     ">`: 
+            '🍽️';
         document.getElementById('predictedDish').innerHTML = 
-            `${platInfo.emoji || '🍽️'} ${platInfo.nom || result.predicted_class}`;
+            `${platImage} ${platInfo.nom || result.predicted_class}`;
         
         // Mise à jour de la barre de confiance
         const confidence = Math.round(result.confidence * 100);
